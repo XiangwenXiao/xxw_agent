@@ -2,99 +2,110 @@
 
 # 🤖 Minimal Agent
 
-**A lightweight, Claude Code-inspired Agent implementation in Python**
+**一个轻量级、受 Claude Code 启发的 Python Agent 实现**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Anthropic API](https://img.shields.io/badge/Anthropic-API-orange.svg)](https://www.anthropic.com/api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-*Built with streaming responses · Concurrent tool execution · Smart context compression*
+*采用流式响应 · 并发工具执行 · 智能上下文压缩*
 
 </div>
 
 ---
 
-🌐 **English** | [中文](README-zh.md)
+## 📋 目录
+
+- [✨ 特性](#-特性)
+- [🚀 快速开始](#-快速开始)
+- [📖 详细使用](#-详细使用)
+- [🏗️ 架构](#️-架构)
+- [🔧 配置](#-配置)
+- [🛠️ 工具系统](#️-工具系统)
+- [🧠 上下文与记忆](#-上下文与记忆)
+- [📊 与 Claude Code 对比](#-与-claude-code-对比)
+- [🗺️ 路线图](#️-路线图)
+- [🤝 贡献](#-贡献)
 
 ---
 
-## 📋 Table of Contents
+## ✨ 特性
 
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [📖 Detailed Usage](#-detailed-usage)
-- [🏗️ Architecture](#️-architecture)
-- [🔧 Configuration](#-configuration)
-- [🛠️ Tool System](#️-tool-system)
-- [🧠 Context & Memory](#-context--memory)
-- [📊 Comparison with Claude Code](#-comparison-with-claude-code)
-- [🗺️ Roadmap](#️-roadmap)
-- [🤝 Contributing](#-contributing)
+### 核心能力
+
+| 特性 | 本 Agent | Claude Code |
+|------|----------|-------------|
+| **架构** | 基于 Anthropic API 的 Agent 循环 | ✅ 相同 |
+| **工具系统** | Bash、Read、Write、Ask、Todo 等 | 相似工具集 |
+| **流式响应** | 支持实时输出 Token | ✅ 相同 |
+| **上下文压缩** | 三层压缩机制 | 相似机制 |
+| **并发工具** | 支持互斥组和并发执行 | ✅ 相同 |
+| **持久化记忆** | 文件系统存储记忆 | 相似 |
+
+### 已实现功能
+
+1. **核心 Agent 循环** - LLM 调用 → 解析 → 工具执行 → 结果反馈
+2. **工具系统**
+   - Bash: 执行 shell 命令
+   - Read: 读取文件
+   - Write: 写入文件
+   - Ask: 向用户提问
+   - Todo: 任务管理
+   - Confirm: 权限确认
+3. **上下文管理** - 三层压缩：大内容卸载、工具结果摘要、全局压缩
+4. **并发执行** - 支持工具互斥组和并发执行
+5. **REPL 界面** - 交互式命令行界面
+6. **记忆系统** - 持久化存储用户偏好和项目信息
+7. **Todo 提醒** - 每隔 N 轮对话提醒待办事项
+8. **日志系统** - 分级日志，支持 DEBUG/INFO/WARNING/ERROR
+
+### 代码质量
+
+- 🎯 **类型提示**: 完整的类型注解覆盖
+- 🧪 **异步/等待**: 现代异步模式
+- 📐 **模块化设计**: 关注点清晰分离
+- 🔒 **错误处理**: 优雅的故障恢复
 
 ---
 
-## ✨ Features
+## 🚀 快速开始
 
-### Core Capabilities
+### 环境要求
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| 🔄 **Agent Loop** | Automatic LLM → Tool → Result iteration | ✅ Ready |
-| ⚡ **Streaming** | Real-time token-by-token output | ✅ Ready |
-| 🛠️ **Tools** | Bash, Read, Write, Ask, Todo, Confirm | ✅ Ready |
-| 🏃 **Concurrency** | Parallel tool execution with mutex groups | ✅ Ready |
-| 📦 **Context Compression** | Three-layer smart compression | ✅ Ready |
-| 💾 **Memory** | Persistent user/project/reference storage | ✅ Ready |
-| 📋 **Todo Reminder** | Periodic task list reminders | ✅ Ready |
-| 📝 **Logging** | Multi-level debug logging | ✅ Ready |
+- Python 3.10 或更高版本
+- Anthropic API key
 
-### Code Quality
-
-- 🎯 **Type Hints**: Full type annotation coverage
-- 🧪 **Async/Await**: Modern async patterns throughout
-- 📐 **Modular Design**: Clean separation of concerns
-- 🔒 **Error Handling**: Graceful failure recovery
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.10 or higher
-- An Anthropic API key
-
-### Installation
+### 安装
 
 ```bash
-# Clone the repository
+# 克隆仓库
 git clone <repository-url>
 cd minimal_agent
 
-# Install dependencies
+# 安装依赖
 pip install -r requirements.txt
 ```
 
-### Configuration
+### 配置
 
 ```bash
-# Required: Set your API key
+# 必需：设置 API key
 export ANTHROPIC_API_KEY="sk-ant-api03-your-key-here"
 
-# Optional: Choose model (default: claude-3-5-haiku-20241022)
+# 可选：选择模型（默认: claude-3-5-haiku-20241022）
 export ANTHROPIC_MODEL="claude-3-5-sonnet-20241022"
 
-# Optional: Enable debug logging
+# 可选：启用调试日志
 export AGENT_LOG_LEVEL="DEBUG"
 ```
 
-### Run
+### 运行
 
 ```bash
 python -m minimal_agent
 ```
 
-You'll see the welcome banner:
+你会看到欢迎横幅：
 
 ```
 ╭──────────────────────────────────────────────────────────────╮
@@ -115,26 +126,28 @@ Type your message below (or 'exit' to quit)
 
 ---
 
-## 📖 Detailed Usage
+## 📖 详细使用
 
-### Interactive Session
+### 交互式会话
 
 ```
-User: Read the README.md file
+User: 读取 README.md 文件
 
-🤖 I'll read the README.md file for you.
+🤖 我将为您读取 README.md 文件。
 
-  ✅ Read completed
+  ✅ Read 已完成
 
-The file contains documentation for a minimal Claude Code-style agent...
+文件内容：
+# 最小化 Claude Code 风格 Agent
+...
 
-User: What files are in the current directory?
+User: 当前目录有哪些文件？
 
-🤖 Let me check the directory structure.
+🤖 让我检查目录结构。
 
-  ✅ Bash completed
+  ✅ Bash 已完成
 
-Files:
+文件列表：
 - README.md
 - requirements.txt
 - minimal_agent/
@@ -144,21 +157,21 @@ Files:
 
 User: exit
 
-👋 Goodbye!
+👋 再见！
 ```
 
-### Log Levels
+### 日志级别
 
-Control verbosity via `AGENT_LOG_LEVEL` environment variable:
+通过 `AGENT_LOG_LEVEL` 环境变量控制详细程度：
 
-| Level | Use Case | Output |
+| 级别 | 使用场景 | 输出 |
 |-------|----------|--------|
-| `DEBUG` | Troubleshooting | All details: chunks, tool inputs, loop iterations |
-| `INFO` | Normal operation | Major events: loop start, tool calls, completions |
-| `WARNING` | Minimal | Warnings only |
-| `ERROR` | Silent | Errors only |
+| `DEBUG` | 故障排查 | 所有细节：分块、工具输入、循环迭代 |
+| `INFO` | 正常操作 | 主要事件：循环开始、工具调用、完成 |
+| `WARNING` | 最小化 | 仅警告 |
+| `ERROR` | 静默 | 仅错误 |
 
-**Example with DEBUG logging:**
+**DEBUG 日志示例：**
 
 ```bash
 $ AGENT_LOG_LEVEL=DEBUG python -m minimal_agent
@@ -173,194 +186,194 @@ $ AGENT_LOG_LEVEL=DEBUG python -m minimal_agent
 [09:15:24] [AGENT] No tool calls, completing with 156 chars
 ```
 
-### Debug Log File
+### 调试日志文件
 
-All logs are also written to `.agent_debug.log` (DEBUG level and above), regardless of console level.
+所有日志也会写入 `.agent_debug.log`（DEBUG 级别及以上），无论控制台级别如何。
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ 架构
 
-### High-Level Architecture
+### 高层架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              USER LAYER                                 │
+│                              用户层                                     │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────────────────────┐  │
-│  │   Input     │    │   Output    │    │   Interactive Dialogs       │  │
-│  │   (Text)    │◀──▶│  (Stream)   │    │   (Confirm/Ask/Progress)    │  │
+│  │   输入      │    │   输出      │    │   交互式对话框              │  │
+│  │   (文本)    │◀──▶│  (流式)     │    │   (确认/询问/进度)          │  │
 │  └─────────────┘    └─────────────┘    └─────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           AGENT CORE LAYER                              │
+│                           Agent 核心层                                  │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                         Main Event Loop                         │   │
+│  │                         主事件循环                               │   │
 │  │                                                                 │   │
 │  │   ┌──────────┐     ┌──────────┐     ┌──────────────────────┐   │   │
-│  │   │  User    │────▶│  Context │────▶│  LLM.complete_       │   │   │
-│  │   │  Message │     │  .add()  │     │  async_stream()      │   │   │
+│  │   │   用户   │────▶│  上下文  │────▶│  LLM.complete_       │   │   │
+│  │   │  消息    │     │  .add()  │     │  async_stream()      │   │   │
 │  │   └──────────┘     └──────────┘     └──────────────────────┘   │   │
 │  │                                                │                │   │
 │  │                                                ▼                │   │
 │  │                              ┌────────────────────────┐         │   │
-│  │                              │    Stream Processor    │         │   │
+│  │                              │    流处理器             │         │   │
 │  │                              │  ┌──────────────────┐  │         │   │
-│  │                              │  │ Text Chunks      │──┼──┬──────┘   │
-│  │                              │  │  └─▶ TokenEvent  │  │  │          │
+│  │                              │  │ 文本分块          │──┼──┬──────┘   │
+│  │                              │  │  └─▶ TokenEvent   │  │  │          │
 │  │                              │  │                  │  │  │          │
-│  │                              │  │ Tool Use Blocks  │──┼──┤          │
-│  │                              │  │  └─▶ Submit to   │  │  │          │
-│  │                              │  │     Executor     │──┼──┤          │
+│  │                              │  │ 工具使用块      │──┼──┤          │
+│  │                              │  │  └─▶ 提交到     │  │  │          │
+│  │                              │  │     执行器      │──┼──┤          │
 │  │                              │  └──────────────────┘  │  │          │
 │  │                              └────────────────────────┘  │          │
-│  │                                                         │          │
-│  │                              ┌────────────────────────┐  │          │
-│  │                              │  Concurrent Executor   │◀─┘          │
+│  │                                         │                │          │
+│  │                                         ▼                │          │
+│  │                              ┌────────────────────────┐    │          │
+│  │                              │   并发执行器            │◀───┘          │
 │  │                              │  ┌──────────────────┐  │             │
-│  │                              │  │ State Machine    │  │             │
+│  │                              │  │  状态机          │  │             │
 │  │                              │  │ ┌──┐ ┌──┐ ┌──┐  │  │             │
-│  │                              │  │ │W │─▶│R │─▶│C │  │  │             │
-│  │                              │  │ │A │ │U │ │O │  │  │             │
-│  │                              │  │ │I │ │N │ │M │  │  │             │
-│  │                              │  │ │T │ │N │ │P │  │  │             │
-│  │                              │  │ └──┘ │I │ │L │  │  │             │
-│  │                              │  │      │N │ │E │  │  │             │
-│  │                              │  │      │G │ │T │  │  │             │
-│  │                              │  │      └──┘ │E │  │  │             │
-│  │                              │  │           └──┘  │  │             │
-│  │                              │  │   Mutex Groups   │  │             │
-│  │                              │  │   (read/write)   │  │             │
+│  │                              │  │ │等│─▶│运│─▶│完│  │  │             │
+│  │                              │  │ │待│ │行│ │成│  │  │             │
+│  │                              │  │ │  │ │中│ │  │  │  │             │
+│  │                              │  │ └──┘ │  │ └──┘  │  │             │
+│  │                              │  │      │  │       │  │             │
+│  │                              │  │      └──┘       │  │             │
+│  │                              │  │                 │  │             │
+│  │                              │  │   互斥组        │  │             │
+│  │                              │  │   (读/写)       │  │             │
 │  │                              │  └──────────────────┘  │             │
 │  │                              └────────────────────────┘             │
 │  │                                         │                          │
 │  │                                         ▼                          │
-│  │   ◀───────────────────────────────────  Results                     │
+│  │   ◀───────────────────────────────────  结果                        │
 │  │                                         │                          │
 │  │                                         ▼                          │
 │  │                              ┌────────────────────────┐             │
-│  │                              │  Tool Result Handler   │             │
+│  │                              │  工具结果处理器        │             │
 │  │                              │  ──▶ Context.add_tool  │             │
 │  │                              └────────────────────────┘             │
 │  │                                         │                          │
 │  │                                         ▼                          │
 │  │   ═══════════════════════════════════════════════════════════════  │
-│  │                    Next Loop Iteration (if tools called)           │
+│  │                    下一轮迭代 (如果有工具调用)                     │
 │  │   ═══════════════════════════════════════════════════════════════  │
 │  │                                         │                          │
 │  │                                         ▼                          │
 │  │                              ┌────────────────────────┐             │
-│  │                              │   CompleteEvent        │────────────┼──▶ Final Output
-│  │                              │   (No more tools)      │            │
+│  │                              │   CompleteEvent        │────────────┼──▶ 最终输出
+│  │                              │   (没有更多工具)       │            │
 │  │                              └────────────────────────┘            │
 │  │                                                                    │
 │  └────────────────────────────────────────────────────────────────────┘
 │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │
-│  │   Config    │  │    Todo     │  │   Logger    │  │   Events    │   │
-│  │   Module    │  │  Reminder   │  │   System    │  │   Queue     │   │
+│  │   配置      │  │    Todo     │  │   日志      │  │   事件      │   │
+│  │   模块      │  │  提醒器     │  │   系统      │  │   队列      │   │
 │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         SERVICE LAYER                                   │
+│                         服务层                                           │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
-│  │    LLM      │  │   Context   │  │    Tool     │  │   Memory    │    │
-│  │   Client    │  │   Manager   │  │   Registry  │  │   Manager   │    │
+│  │    LLM      │  │   上下文    │  │    工具     │  │   记忆      │    │
+│  │   客户端    │  │   管理器    │  │   注册表    │  │   管理器    │    │
 │  │             │  │             │  │             │  │             │    │
-│  │ • Stream    │  │ • Messages  │  │ • Execution │  │ • Load/Save │    │
-│  │ • Non-stream│  │ • Compress  │  │ • Registry  │  │ • Index     │    │
-│  │ • Async     │  │ • 3 Layers  │  │ • Schemas   │  │ • Search    │    │
+│  │ • 流式      │  │ • 消息      │  │ • 执行      │  │ • 加载/保存 │    │
+│  │ • 非流式    │  │ • 压缩      │  │ • 注册      │  │ • 索引      │    │
+│  │ • 异步      │  │ • 3 层      │  │ • 模式      │  │ • 搜索      │    │
 │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                     │
+│  │   记忆      │  │    Todo     │  │   并发执行器 │                     │
+│  │  管理器     │  │  提醒器     │  │  & 状态机   │                     │
+│  └─────────────┘  └─────────────┘  └─────────────┘                     │
 └─────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        EXTERNAL SERVICES                                │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                    Anthropic Messages API                       │   │
-│  │         (Claude 3.5 Haiku / Sonnet / Opus Models)               │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
+│                    Anthropic API                                       │
+│                  (LLM Provider)                                        │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Component Details
+### 组件说明
 
-#### 1. Agent Core (`agent.py`)
+#### 1. Agent 核心 (`agent.py`)
 
-The heart of the system. Manages the conversation loop and coordinates all components.
+系统的心脏。管理对话循环并协调所有组件。
 
 ```python
 async def run_stream(self, user_input: str):
-    """Main event loop with streaming support."""
+    """支持流式的主事件循环。"""
     self.context.add_user(user_input)
 
     while True:
-        # 1. Check todo reminder
-        # 2. Apply context compression (3 layers)
-        # 3. Start LLM stream
-        # 4. Process stream (text + tool_use)
-        # 5. Wait for tool completion
-        # 6. If tools were called, loop again
-        # 7. If no tools, return CompleteEvent
+        # 1. 检查 todo 提醒
+        # 2. 应用上下文压缩（3 层）
+        # 3. 启动 LLM 流
+        # 4. 处理流（文本 + 工具使用）
+        # 5. 等待工具完成
+        # 6. 如果调用了工具，再次循环
+        # 7. 如果没有工具，返回 CompleteEvent
 ```
 
-**Key Features:**
-- **Streaming**: Yields `TokenEvent` for real-time display
-- **Concurrency**: Tools run in parallel with mutex group coordination
-- **Iteration**: Automatically loops when tool results need processing
-- **State**: Tracks executor for permission/question resolution
+**主要特性：**
+- **流式**：产生 `TokenEvent` 用于实时显示
+- **并发**：使用互斥组协调并行工具执行
+- **迭代**：当需要处理工具结果时自动循环
+- **状态**：跟踪执行器以进行权限/问题解析
 
-#### 2. Context Manager (`context.py`)
+#### 2. 上下文管理器 (`context.py`)
 
-Manages conversation history with intelligent compression.
+使用智能压缩管理对话历史。
 
-**Three-Layer Compression:**
+**三层压缩：**
 
-| Layer | Trigger | Action |
+| 层级 | 触发条件 | 动作 |
 |-------|---------|--------|
-| **Layer 1** | Individual result > 100KB | Offload to file (`.agent_context/offload/`) |
-| **Layer 2** | Total tool results > 500KB | Summarize old results with LLM |
-| **Layer 3** | Total context > 93% of limit | Global summarization, keep last 4 messages |
+| **第 1 层** | 单个结果 > 100KB | 卸载到文件 (`.agent_context/offload/`) |
+| **第 2 层** | 总工具结果 > 500KB | 使用 LLM 摘要旧结果 |
+| **第 3 层** | 总上下文 > 限制 93% | 全局摘要，保留最近 4 条消息 |
 
 ```
-Context Flow:
+上下文流：
 
-User Message ──▶ Messages List ──▶ Compression ──▶ LLM API
+用户消息 ──▶ 消息列表 ──▶ 压缩 ──▶ LLM API
                                            │
                     ┌──────────────────────┼──────────────────────┐
                     │                      │                      │
                     ▼                      ▼                      ▼
               ┌─────────┐          ┌─────────────┐        ┌─────────────┐
-              │ Layer 1 │          │   Layer 2   │        │   Layer 3   │
-              │ offload │          │ microcompact│        │  autocompact│
+              │ 第 1 层 │          │   第 2 层   │        │   第 3 层   │
+              │ 卸载    │          │ 微压缩      │        │  自动压缩   │
               │ (100KB) │          │  (500KB)    │        │   (93%)     │
               └─────────┘          └─────────────┘        └─────────────┘
 ```
 
-#### 3. Concurrent Executor (`concurrent_executor.py`)
+#### 3. 并发执行器 (`concurrent_executor.py`)
 
-Manages parallel tool execution with state machine.
+使用状态机管理并行工具执行。
 
-**States:**
+**状态：**
 ```
 ┌────────┐    ┌────────┐    ┌────────┐
-│ WAITING│───▶│ RUNNING│───▶│COMPLETE│
+│ 等待中 │───▶│ 运行中 │───▶│ 已完成│
 └────────┘    └────────┘    └────────┘
      │                              │
-     └────────▶ FAILED ◀────────────┘
+     └────────▶ 失败 ◀────────────┘
 ```
 
-**Mutex Groups:**
-- `read` group: Multiple reads can run concurrently
-- `write` group: Writes are exclusive
-- `bash` group: Reads wait for writes to complete
+**互斥组：**
+- `read` 组：多个读取可以并发运行
+- `write` 组：写入是独占的
+- `bash` 组：读取等待写入完成
 
-#### 4. Tool System (`tools/`)
+#### 4. 工具系统 (`tools/`)
 
-Extensible tool framework with base class.
+带有基类的可扩展工具框架。
 
 ```python
 class Tool(ABC):
@@ -378,113 +391,113 @@ class Tool(ABC):
     async def check_permission(self, **kwargs) -> dict | None: ...
 ```
 
-**Built-in Tools:**
+**内置工具：**
 
-| Tool | Purpose | Mutex Group |
+| 工具 | 用途 | 互斥组 |
 |------|---------|-------------|
-| `bash` | Execute shell commands | bash |
-| `read` | Read file contents | read |
-| `write` | Write/modify files | write |
-| `ask_user` | Ask user questions | - |
-| `confirm` | Request permission | - |
-| `todo_write` | Manage task lists | - |
+| `bash` | 执行 shell 命令 | bash |
+| `read` | 读取文件内容 | read |
+| `write` | 写入/修改文件 | write |
+| `ask_user` | 向用户提问 | - |
+| `confirm` | 请求权限 | - |
+| `todo_write` | 管理任务列表 | - |
 
-#### 5. Memory System (`memory/`)
+#### 5. 记忆系统 (`memory/`)
 
-Persistent storage for cross-conversation context.
+用于跨对话上下文的持久存储。
 
-**Memory Types:**
+**记忆类型：**
 
-| Type | File | Use Case |
+| 类型 | 文件 | 用例 |
 |------|------|----------|
-| `user` | USER.md | User preferences, role, knowledge |
-| `feedback` | FEEDBACK.md | Guidance on what to do/avoid |
-| `project` | PROJECT.md | Deadlines, constraints, ongoing work |
-| `reference` | REFERENCE.md | External resource pointers |
+| `user` | USER.md | 用户偏好、角色、知识 |
+| `feedback` | FEEDBACK.md | 应该做什么/避免什么的指导 |
+| `project` | PROJECT.md | 截止日期、约束、正在进行的工作 |
+| `reference` | REFERENCE.md | 外部资源指针 |
 
-**Storage:**
-- Directory: `.xxw_memory/`
-- Format: Markdown with YAML frontmatter
-- Index: `MEMORY.md` (auto-generated)
+**存储：**
+- 目录：`.xxw_memory/`
+- 格式：带有 YAML frontmatter 的 Markdown
+- 索引：`MEMORY.md`（自动生成）
 
-#### 6. Todo Reminder System
+#### 6. Todo 提醒系统
 
-Integrated with `todo_write` tool to periodically remind about tasks.
+与 `todo_write` 工具集成，定期提醒任务。
 
 ```
-Every 3 conversation rounds (configurable):
+每 3 轮对话（可配置）：
 
 ┌─────────────┐
-│  Counter    │──────▶ Counter == 3? ──▶ Yes ──▶ Format todo list
-│  Increment  │                              │        (filter completed)
+│   计数器    │──────▶ 计数器 == 3? ──▶ 是 ──▶ 格式化 todo 列表
+│   递增      │                              │        （过滤已完成）
 └─────────────┘                              ▼
                                       ┌─────────────┐
-                                      │ Add reminder│──▶ Context.add_user()
-                                      │ to context  │
+                                      │ 添加提醒  │──▶ Context.add_user()
+                                      │ 到上下文  │
                                       └─────────────┘
 ```
 
 ---
 
-## 🔧 Configuration
+## 🔧 配置
 
-### Environment Variables
+### 环境变量
 
-| Variable | Description | Default | Required |
+| 变量 | 描述 | 默认值 | 必需 |
 |----------|-------------|---------|----------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key | - | ✅ Yes |
-| `ANTHROPIC_AUTH_TOKEN` | Alternative auth token | - | ❌ No |
-| `ANTHROPIC_BASE_URL` | API base URL (for proxies) | - | ❌ No |
-| `ANTHROPIC_MODEL` | Model identifier | `claude-3-5-haiku-20241022` | ❌ No |
-| `AGENT_LOG_LEVEL` | Log level (DEBUG/INFO/WARNING/ERROR) | `INFO` | ❌ No |
+| `ANTHROPIC_API_KEY` | 你的 Anthropic API key | - | ✅ 是 |
+| `ANTHROPIC_AUTH_TOKEN` | 替代认证 token | - | ❌ 否 |
+| `ANTHROPIC_BASE_URL` | API 基础 URL（用于代理） | - | ❌ 否 |
+| `ANTHROPIC_MODEL` | 模型标识符 | `claude-3-5-haiku-20241022` | ❌ 否 |
+| `AGENT_LOG_LEVEL` | 日志级别 (DEBUG/INFO/WARNING/ERROR) | `INFO` | ❌ 否 |
 
-### Config Module (`config.py`)
+### 配置模块 (`config.py`)
 
 ```python
 @dataclass
 class AgentConfig:
-    todo_reminder_interval: int = 3        # Rounds between reminders
-    context_threshold_ratio: float = 0.93   # Compression trigger
-    offload_threshold: int = 100000         # Bytes
-    tool_results_total_limit: int = 500000  # Bytes
-    max_tokens: int = 8000                  # Context limit
+    todo_reminder_interval: int = 3        # 提醒间隔轮数
+    context_threshold_ratio: float = 0.93   # 压缩触发阈值
+    offload_threshold: int = 100000         # 字节
+    tool_results_total_limit: int = 500000  # 字节
+    max_tokens: int = 8000                  # 上下文限制
 ```
 
 ---
 
-## 🛠️ Tool System
+## 🛠️ 工具系统
 
-### Tool Execution Flow
+### 工具执行流程
 
 ```
 ┌─────────────┐
-│  Tool Use   │
-│   Block     │
-│  in Stream  │
+│  工具使用   │
+│   块       │
+│  在流中    │
 └──────┬──────┘
        │
        ▼
 ┌─────────────────┐
-│ check_permission│──▶ Needs permission? ──▶ Yes ──▶ Show dialog
-│   (async)       │                              │
+│ check_permission│──▶ 需要权限? ──▶ 是 ──▶ 显示对话框
+│   (异步)        │                              │
 └──────┬──────────┘                              ▼
        │                                ┌─────────────────┐
-       │ No                             │ Wait for user │
-       │                                │   response    │
+       │ 否                              │ 等待用户      │
+       │                                │   响应        │
        ▼                                └───────┬─────────┘
 ┌─────────────────┐                            │
 │    execute()    │◀───────────────────────────┘
-│    (async)      │
+│    (异步)       │
 └──────┬──────────┘
        │
        ▼
 ┌─────────────────┐
-│  Return Result  │
-│   or Error      │
+│  返回结果       │
+│   或错误        │
 └─────────────────┘
 ```
 
-### Tool Implementation Example
+### 工具实现示例
 
 ```python
 from minimal_agent.tools.base import Tool
@@ -496,269 +509,208 @@ class MyTool(Tool):
 
     @property
     def description(self) -> str:
-        return "Does something useful"
+        return "做一些有用的事情"
 
     @property
     def parameters(self) -> dict:
         return {
             "arg1": {
                 "type": "string",
-                "description": "First argument"
+                "description": "第一个参数"
             }
         }
 
     async def execute(self, **kwargs) -> str:
         arg1 = kwargs.get("arg1", "")
-        return f"Processed: {arg1}"
+        return f"已处理: {arg1}"
 ```
 
-### Registering Tools
+### 注册工具
 
 ```python
-# In __main__.py
+# 在 __main__.py 中
 tools.register(MyTool())
 ```
 
 ---
 
-## 🧠 Context & Memory
+## 🧠 上下文与记忆
 
-### Context Compression Details
+### 上下文压缩详情
 
-**Layer 1: Big Content Offloading**
+**第 1 层：大内容卸载**
 
 ```python
 if len(tool_content) > 100_000:  # 100KB
     save_to_file(f"{tool_call_id}.json", content)
-    replace_with = f"[Content saved to {path}, {len} chars]"
+    replace_with = f"[内容已保存到 {path}, {len} 字符]"
 ```
 
-**Layer 2: Tool Result Budget**
+**第 2 层：工具结果预算**
 
 ```python
 if total_tool_results > 500_000:  # 500KB
     for old_result in oldest_results_except_last_4:
         summary = llm_summarize(old_result, max_words=50)
-        replace_with = f"[Summary] {summary}"
+        replace_with = f"[摘要] {summary}"
 ```
 
-**Layer 3: Global Auto-compact**
+**第 3 层：全局自动压缩**
 
 ```python
 if total_context > 0.93 * model_limit:
     summary = llm_summarize(all_conversation)
-    system_prompt += f"\n\n=== History Summary ===\n{summary}"
-    messages = messages[-4:]  # Keep last 2 exchanges
+    system_prompt += f"\n\n=== 历史摘要 ===\n{summary}"
+    messages = messages[-4:]  # 保留最近 2 轮对话
 ```
 
-### Memory System Usage
+### 记忆系统使用
 
 ```python
-# Automatically loaded at agent startup
+# 在 agent 启动时自动加载
 memory_manager = MemoryManager()
 memory_context = memory_manager.get_memory_context()
-# Injected into system prompt
+# 注入到系统提示中
 ```
 
-Memory files (`.xxw_memory/`):
+记忆文件 (`.xxw_memory/`)：
 
 ```markdown
 ---
-name: User Preferences
-description: User likes terse responses
+name: 用户偏好
+description: 用户喜欢简洁的回复
 type: user
 ---
 
-Prefer short, direct answers without unnecessary explanations.
+喜欢简短直接的回答，不需要不必要的解释。
 ```
 
 ---
 
-## 📊 Comparison with Claude Code
+## 📊 与 Claude Code 对比
 
-### Similarities ✅
+### 相似之处 ✅
 
-| Aspect | This Agent | Claude Code |
-|--------|-----------|-------------|
-| **Architecture** | Agent loop with tool use | ✅ Same |
-| **LLM Provider** | Anthropic API | ✅ Same |
-| **Streaming** | Real-time token output | ✅ Same |
-| **Tool Pattern** | LLM chooses → Agent executes | ✅ Same |
-| **Context Window** | Smart compression | ✅ Similar |
-| **Async Design** | Concurrent tool execution | ✅ Same |
-| **State Machine** | WAITING → RUNNING → COMPLETE | ✅ Same |
+| 特性 | 本 Agent | Claude Code |
+|------|----------|-------------|
+| **架构** | 基于 Anthropic API 的 Agent 循环 | ✅ 相同 |
+| **工具系统** | Bash、Read、Write、Ask、Todo 等 | 相似工具集 |
+| **流式响应** | 支持实时输出 Token | ✅ 相同 |
+| **上下文压缩** | 智能压缩机制 | 相似机制 |
+| **并发工具** | 支持互斥组和并发执行 | ✅ 相同 |
+| **持久化记忆** | 文件系统存储记忆 | 相似 |
 
-### Differences ⚠️
+### 不同之处 ⚠️
 
-| Aspect | This Agent | Claude Code |
-|--------|-----------|-------------|
-| **Interface** | Terminal REPL | Deep IDE integration |
-| **Tool Count** | 6 basic tools | 15+ advanced tools |
-| **Git Support** | Via bash only | Native PR/diff/branch |
-| **Web Search** | ❌ Not implemented | ✅ Built-in |
-| **Code Index** | ❌ Not implemented | ✅ Project-wide symbols |
-| **MCP** | ❌ Not implemented | ✅ MCP servers |
-| **Shortcuts** | ❌ None | ✅ Rich keybindings |
-| **Testing** | ❌ No built-in tests | ✅ Test runner |
-| **Multi-file** | Basic | Advanced multi-file edits |
+| 特性 | 本 Agent | Claude Code |
+|------|----------|-------------|
+| **界面** | 终端 REPL | 深度 IDE 集成 |
+| **工具数量** | 6 个基础工具 | 15+ 高级工具 |
+| **Git 支持** | 仅通过 bash | 原生 PR/差异/分支 |
+| **网页搜索** | ❌ 未实现 | ✅ 内置 |
+| **代码索引** | ❌ 未实现 | ✅ 项目级符号 |
+| **MCP** | ❌ 未实现 | ✅ MCP 服务器 |
+| **快捷键** | ❌ 无 | ✅ 丰富的快捷键 |
+| **测试** | ❌ 无内置测试 | ✅ 测试运行器 |
+| **多文件** | 基础 | 高级多文件编辑 |
 
-### Architecture Comparison
+### 架构对比
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    CLAUDE CODE (Reference)                      │
+│                    CLAUDE CODE (参考)                            │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                    VSCode Extension                      │   │
+│  │                    VSCode 扩展                           │   │
 │  │  ┌────────────┐  ┌────────────┐  ┌────────────────────┐ │   │
-│  │  │   Editor   │  │   Panel    │  │   Inline Diff      │ │   │
-│  │  │   Widgets  │  │   Chat     │  │   Decorations      │ │   │
+│  │  │   编辑器   │  │   侧边栏   │  │   内联差异         │ │   │
+│  │  │   小部件   │  │   聊天     │  │   装饰             │ │   │
 │  │  └────────────┘  └────────────┘  └────────────────────┘ │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │                              ▼                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │               Claude Code CLI / Daemon                   │   │
+│  │               Claude Code CLI / 守护进程                 │   │
 │  │  ┌───────────────────────────────────────────────────┐  │   │
-│  │  │         Enhanced Tool System                      │  │   │
+│  │  │         增强工具系统                              │  │   │
 │  │  │  ┌───────┐ ┌───────┐ ┌────────┐ ┌──────────┐     │  │   │
-│  │  │  │  Git  │ │  Web  │ │ Search │ │ Terminal │     │  │   │
-│  │  │  │ Tools │ │ Tools │ │ Tools  │ │  Tools   │     │  │   │
+│  │  │  │  Git  │ │  Web  │ │ 搜索   │ │ 终端     │     │  │   │
+│  │  │  │ 工具  │ │ 工具  │ │ 工具   │ │ 工具     │     │  │   │
 │  │  │  └───────┘ └───────┘ └────────┘ └──────────┘     │  │   │
 │  │  └───────────────────────────────────────────────────┘  │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │                              ▼                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │              Model Context Protocol (MCP)                │   │
+│  │              模型上下文协议 (MCP)                        │   │
 │  │         ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐         │   │
-│  │         │Server1│ │Server2│ │Server3│ │Server4│         │   │
+│  │         │服务器1│ │服务器2│ │服务器3│ │服务器4│         │   │
 │  │         └───────┘ └───────┘ └───────┘ └───────┘         │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                  THIS AGENT (Implementation)                    │
+│                  本 AGENT (实现)                                │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                   Terminal REPL                          │   │
+│  │                   终端 REPL                              │   │
 │  │  ┌────────────────────┐  ┌────────────────────────────┐ │   │
-│  │  │   Simple Input     │  │   Stream Output            │ │   │
+│  │  │   简单输入         │  │   流式输出                 │ │   │
 │  │  │   (prompt_toolkit) │  │   (print)                  │ │   │
 │  │  └────────────────────┘  └────────────────────────────┘ │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │                              ▼                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                 Minimal Agent Core                       │   │
+│  │                 最小化 Agent 核心                        │   │
 │  │  ┌───────────────────────────────────────────────────┐  │   │
-│  │  │         Basic Tool System                         │  │   │
+│  │  │         基础工具系统                              │  │   │
 │  │  │  ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐         │  │   │
-│  │  │  │  Read │ │ Write │ │  Bash │ │  Todo │         │  │   │
+│  │  │  │  读取 │ │  写入 │ │  Bash │ │  Todo │         │  │   │
 │  │  │  └───────┘ └───────┘ └───────┘ └───────┘         │  │   │
 │  │  └───────────────────────────────────────────────────┘  │   │
 │  │  ┌───────────────────────────────────────────────────┐  │   │
-│  │  │       Context Compression + Memory                │  │   │
+│  │  │       上下文压缩 + 记忆系统                         │  │   │
 │  │  └───────────────────────────────────────────────────┘  │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                              │                                  │
 │                              ▼                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │              Direct Anthropic API Call                   │   │
+│  │              直接 Anthropic API 调用                     │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🗺️ Roadmap
+## 快速开始
 
-### Phase 1: Core Stability ✅
-- [x] Basic agent loop
-- [x] Streaming support
-- [x] Tool system
-- [x] Context compression
-- [x] Concurrent execution
+### 安装
 
-### Phase 2: Enhanced Tools 🚧
-- [ ] Git integration (status, diff, commit)
-- [ ] Web search tool
-- [ ] Multi-file editing
-- [ ] Code search/index
+```bash
+pip install -r requirements.txt
+```
 
-### Phase 3: Advanced Features 📋
-- [ ] MCP (Model Context Protocol) support
-- [ ] Test runner integration
-- [ ] Code analysis/linting
-- [ ] Project scaffolding
+### 配置
 
-### Phase 4: IDE Integration 📋
-- [ ] VSCode extension
-- [ ] Language server protocol
-- [ ] Inline suggestions
-- [ ] Rich UI components
+```bash
+export ANTHROPIC_API_KEY="your-api-key"
+```
+
+### 运行
+
+```bash
+python -m minimal_agent
+```
 
 ---
 
-## 🤝 Contributing
+## 许可证
 
-### Project Structure
-
-```
-minimal_agent/
-├── __init__.py              # Package exports
-├── __main__.py              # Entry point
-├── agent.py                 # Core agent loop ⭐
-├── config.py                # Global configuration
-├── context.py               # Context & compression ⭐
-├── events.py                # Event types
-├── llm_client.py            # Anthropic API client
-├── log.py                   # Session logging
-├── logger.py                # Debug logger
-├── repl.py                  # REPL interface ⭐
-├── check_installation.py    # Setup verification
-│
-├── memory/                  # Persistence layer
-│   ├── __init__.py
-│   ├── manager.py           # Memory management
-│   └── types.py             # Type definitions
-│
-├── tools/                   # Tool system
-│   ├── __init__.py
-│   ├── base.py              # Tool base class ⭐
-│   ├── concurrent_executor.py  # Parallel execution ⭐
-│   ├── state_manager.py     # Execution state machine
-│   └── implementations/     # Concrete tools
-│       ├── ask_user.py
-│       ├── bash.py
-│       ├── confirm.py
-│       ├── read.py
-│       ├── todoWrite.py     ⭐
-│       └── write.py
-│
-└── .xxw_memory/             # Created at runtime
-    ├── MEMORY.md            # Auto-generated index
-    ├── USER.md              # User memories
-    ├── FEEDBACK.md          # Feedback memories
-    ├── PROJECT.md           # Project memories
-    └── REFERENCE.md         # Reference memories
-```
-
-### Key Files for Understanding
-
-1. **`agent.py`** - Start here for the main loop
-2. **`context.py`** - Context compression logic
-3. **`tools/base.py`** - Tool interface
-4. **`tools/concurrent_executor.py`** - Concurrency model
-
----
-
-## 📜 License
-
-MIT License - See [LICENSE](LICENSE) for details.
+MIT License - 详见 [LICENSE](LICENSE)
 
 ---
 
 <div align="center">
 
-**Built with ❤️ using Python and Anthropic API**
+**使用 ❤️ 和 Python + Anthropic API 构建**
 
 </div>

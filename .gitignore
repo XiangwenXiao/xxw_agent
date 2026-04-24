@@ -5,3 +5,5 @@ test*
 .agent_context
 .xxw_memory
 logs
+openspec
+calculator

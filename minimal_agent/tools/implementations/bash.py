@@ -172,6 +172,13 @@ class BashTool(Tool):
             if not result:
                 result.append(f"Command completed with exit code: {process.returncode}")
 
+            # Ensure transport is closed on Windows to avoid __del__ errors
+            try:
+                if process._transport and hasattr(process._transport, 'close'):
+                    process._transport.close()
+            except:
+                pass
+
             return "\n\n".join(result)
 
         except asyncio.TimeoutError:
@@ -180,6 +187,13 @@ class BashTool(Tool):
                 await process.wait()
             except:
                 pass
+            finally:
+                # Ensure transport is closed on Windows
+                try:
+                    if process._transport and hasattr(process._transport, 'close'):
+                        process._transport.close()
+                except:
+                    pass
             return f"Error: Command timed out after {timeout} seconds"
 
         except Exception as e:

@@ -20,10 +20,10 @@ You have a persistent memory system. Use it to remember:
 
 ### Memory Types
 
-- **user**: User's role, goals, knowledge (对应 USER.md)
-- **feedback**: Guidance on what to do/avoid (对应 FEEDBACK.md)
-- **project**: Ongoing work, deadlines, constraints (对应 PROJECT.md)
-- **reference**: Pointers to external resources (对应 REFERENCE.md)
+- **user**: User's role, goals, knowledge (Correspond to USER.md)
+- **feedback**: Guidance on what to do/avoid (Correspond to FEEDBACK.md)
+- **project**: Ongoing work, deadlines, constraints (Correspond to PROJECT.md)
+- **reference**: Pointers to external resources (Correspond to REFERENCE.md)
 
 ### How to Save Memories
 
