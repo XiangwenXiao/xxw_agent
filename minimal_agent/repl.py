@@ -206,4 +206,4 @@ class REPL:
                 break
             except Exception as e:
                 print(f"❌ Error: {e}\n")
-                self.logger._write_entry("Error", str(e))
+                self.logger.log_error(str(e))

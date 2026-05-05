@@ -49,6 +49,7 @@
    - Bash: 执行 shell 命令
    - Read: 读取文件
    - Write: 写入文件
+   - Web Search: 网络搜索（Bing + DuckDuckGo）
    - Ask: 向用户提问
    - Todo: 任务管理
    - Confirm: 权限确认
@@ -57,7 +58,7 @@
 5. **REPL 界面** - 交互式命令行界面
 6. **记忆系统** - 持久化存储用户偏好和项目信息
 7. **Todo 提醒** - 每隔 N 轮对话提醒待办事项
-8. **日志系统** - 分级日志，支持 DEBUG/INFO/WARNING/ERROR
+8. **日志系统** - 使用 Python logging 模块，仅输出到文件
 
 ### 代码质量
 
@@ -94,9 +95,6 @@ export ANTHROPIC_API_KEY="sk-ant-api03-your-key-here"
 
 # 可选：选择模型（默认: claude-3-5-haiku-20241022）
 export ANTHROPIC_MODEL="claude-3-5-sonnet-20241022"
-
-# 可选：启用调试日志
-export AGENT_LOG_LEVEL="DEBUG"
 ```
 
 ### 运行
@@ -160,35 +158,16 @@ User: exit
 👋 再见！
 ```
 
-### 日志级别
+### 日志文件
 
-通过 `AGENT_LOG_LEVEL` 环境变量控制详细程度：
+所有日志写入 `logs/` 目录下的文件，控制台不输出：
 
-| 级别 | 使用场景 | 输出 |
-|-------|----------|--------|
-| `DEBUG` | 故障排查 | 所有细节：分块、工具输入、循环迭代 |
-| `INFO` | 正常操作 | 主要事件：循环开始、工具调用、完成 |
-| `WARNING` | 最小化 | 仅警告 |
-| `ERROR` | 静默 | 仅错误 |
+| 日志文件 | 来源 | 内容 |
+|----------|--------|---------|
+| `logs/agent.log` | Agent 诊断 (`debug/info/warning/error`) | 循环迭代、工具调用、流事件 |
+| `logs/session_*.log` | 对话记录器 | 完整对话历史及工具结果 |
 
-**DEBUG 日志示例：**
-
-```bash
-$ AGENT_LOG_LEVEL=DEBUG python -m minimal_agent
-
-[09:15:23] [AGENT] run_stream started with input: 你好...
-[09:15:23] [AGENT] User message added to context. Messages count: 1
-[09:15:23] [AGENT] === Starting loop iteration 1 ===
-[09:15:23] [AGENT] Starting LLM stream...
-[09:15:23] [AGENT] LLM stream created
-[09:15:23] [AGENT] Consuming LLM stream...
-[09:15:24] [AGENT] LLM stream ended: 42 chunks, 0 tool uses, 156 chars
-[09:15:24] [AGENT] No tool calls, completing with 156 chars
-```
-
-### 调试日志文件
-
-所有日志也会写入 `.agent_debug.log`（DEBUG 级别及以上），无论控制台级别如何。
+会话日志文件名包含时间戳后缀，例如 `session_20260505_174007.log`。
 
 ---
 
@@ -398,8 +377,8 @@ class Tool(ABC):
 | `bash` | 执行 shell 命令 | bash |
 | `read` | 读取文件内容 | read |
 | `write` | 写入/修改文件 | write |
+| `web_search` | 网络搜索（Bing + DuckDuckGo） | - |
 | `ask_user` | 向用户提问 | - |
-| `confirm` | 请求权限 | - |
 | `todo_write` | 管理任务列表 | - |
 
 #### 5. 记忆系统 (`memory/`)
@@ -449,7 +428,6 @@ class Tool(ABC):
 | `ANTHROPIC_AUTH_TOKEN` | 替代认证 token | - | ❌ 否 |
 | `ANTHROPIC_BASE_URL` | API 基础 URL（用于代理） | - | ❌ 否 |
 | `ANTHROPIC_MODEL` | 模型标识符 | `claude-3-5-haiku-20241022` | ❌ 否 |
-| `AGENT_LOG_LEVEL` | 日志级别 (DEBUG/INFO/WARNING/ERROR) | `INFO` | ❌ 否 |
 
 ### 配置模块 (`config.py`)
 
@@ -607,7 +585,7 @@ type: user
 | **界面** | 终端 REPL | 深度 IDE 集成 |
 | **工具数量** | 6 个基础工具 | 15+ 高级工具 |
 | **Git 支持** | 仅通过 bash | 原生 PR/差异/分支 |
-| **网页搜索** | ❌ 未实现 | ✅ 内置 |
+| **网页搜索** | ✅ Bing + DuckDuckGo | ✅ 内置 |
 | **代码索引** | ❌ 未实现 | ✅ 项目级符号 |
 | **MCP** | ❌ 未实现 | ✅ MCP 服务器 |
 | **快捷键** | ❌ 无 | ✅ 丰富的快捷键 |
@@ -677,28 +655,6 @@ type: user
 │  │              直接 Anthropic API 调用                     │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 快速开始
-
-### 安装
-
-```bash
-pip install -r requirements.txt
-```
-
-### 配置
-
-```bash
-export ANTHROPIC_API_KEY="your-api-key"
-```
-
-### 运行
-
-```bash
-python -m minimal_agent
 ```
 
 ---

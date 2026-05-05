@@ -13,7 +13,7 @@ from minimal_agent.events import (
 from minimal_agent.memory import MemoryManager
 from minimal_agent.config import get_config
 from minimal_agent.tools.implementations.todoWrite import TodoWriteTool
-from minimal_agent.logger import debug, info, warning, error
+from minimal_agent.log import debug, info, warning, error
 
 
 class Agent:

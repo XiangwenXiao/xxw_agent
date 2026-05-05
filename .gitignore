@@ -4,6 +4,8 @@ test*
 .claude
 .agent_context
 .xxw_memory
+.gitignore
 logs
 openspec
 calculator
+.agent_debug.log

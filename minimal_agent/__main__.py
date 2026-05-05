@@ -35,6 +35,7 @@ async def main():
     from minimal_agent.tools.implementations.write import WriteTool
     from minimal_agent.tools.implementations.ask_user import AskUserQuestionTool
     from minimal_agent.tools.implementations.todoWrite import TodoWriteTool
+    from minimal_agent.tools.implementations.web_search import WebSearchTool
 
     # Load environment
     load_dotenv()
@@ -72,6 +73,7 @@ async def main():
         tools.register(WriteTool())
         tools.register(AskUserQuestionTool())
         tools.register(TodoWriteTool())
+        tools.register(WebSearchTool())
         print("✓ Tools registered")
 
         # Create context

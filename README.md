@@ -41,12 +41,13 @@
 |---------|-------------|--------|
 | 🔄 **Agent Loop** | Automatic LLM → Tool → Result iteration | ✅ Ready |
 | ⚡ **Streaming** | Real-time token-by-token output | ✅ Ready |
-| 🛠️ **Tools** | Bash, Read, Write, Ask, Todo, Confirm | ✅ Ready |
+| 🛠️ **Tools** | Bash, Read, Write, Web Search, Ask, Todo | ✅ Ready |
 | 🏃 **Concurrency** | Parallel tool execution with mutex groups | ✅ Ready |
+| 🌐 **Web Search** | Bing + DuckDuckGo, no API key needed | ✅ Ready |
 | 📦 **Context Compression** | Three-layer smart compression | ✅ Ready |
 | 💾 **Memory** | Persistent user/project/reference storage | ✅ Ready |
 | 📋 **Todo Reminder** | Periodic task list reminders | ✅ Ready |
-| 📝 **Logging** | Multi-level debug logging | ✅ Ready |
+| 📝 **Logging** | Python logging module, file-only output | ✅ Ready |
 
 ### Code Quality
 
@@ -83,9 +84,6 @@ export ANTHROPIC_API_KEY="sk-ant-api03-your-key-here"
 
 # Optional: Choose model (default: claude-3-5-haiku-20241022)
 export ANTHROPIC_MODEL="claude-3-5-sonnet-20241022"
-
-# Optional: Enable debug logging
-export AGENT_LOG_LEVEL="DEBUG"
 ```
 
 ### Run
@@ -147,35 +145,16 @@ User: exit
 👋 Goodbye!
 ```
 
-### Log Levels
+### Log Files
 
-Control verbosity via `AGENT_LOG_LEVEL` environment variable:
+All logs are written to files in the `logs/` directory — nothing prints to the console:
 
-| Level | Use Case | Output |
-|-------|----------|--------|
-| `DEBUG` | Troubleshooting | All details: chunks, tool inputs, loop iterations |
-| `INFO` | Normal operation | Major events: loop start, tool calls, completions |
-| `WARNING` | Minimal | Warnings only |
-| `ERROR` | Silent | Errors only |
+| Log File | Source | Content |
+|----------|--------|---------|
+| `logs/agent.log` | Agent diagnostics (`debug/info/warning/error`) | Loop iterations, tool calls, stream events |
+| `logs/session_*.log` | Conversation logger | Full dialogue history with tool results |
 
-**Example with DEBUG logging:**
-
-```bash
-$ AGENT_LOG_LEVEL=DEBUG python -m minimal_agent
-
-[09:15:23] [AGENT] run_stream started with input: 你好...
-[09:15:23] [AGENT] User message added to context. Messages count: 1
-[09:15:23] [AGENT] === Starting loop iteration 1 ===
-[09:15:23] [AGENT] Starting LLM stream...
-[09:15:23] [AGENT] LLM stream created
-[09:15:23] [AGENT] Consuming LLM stream...
-[09:15:24] [AGENT] LLM stream ended: 42 chunks, 0 tool uses, 156 chars
-[09:15:24] [AGENT] No tool calls, completing with 156 chars
-```
-
-### Debug Log File
-
-All logs are also written to `.agent_debug.log` (DEBUG level and above), regardless of console level.
+The session log filename includes a timestamp suffix, e.g. `session_20260505_174007.log`.
 
 ---
 
@@ -385,8 +364,8 @@ class Tool(ABC):
 | `bash` | Execute shell commands | bash |
 | `read` | Read file contents | read |
 | `write` | Write/modify files | write |
+| `web_search` | Search the web (Bing + DuckDuckGo) | - |
 | `ask_user` | Ask user questions | - |
-| `confirm` | Request permission | - |
 | `todo_write` | Manage task lists | - |
 
 #### 5. Memory System (`memory/`)
@@ -436,7 +415,6 @@ Every 3 conversation rounds (configurable):
 | `ANTHROPIC_AUTH_TOKEN` | Alternative auth token | - | ❌ No |
 | `ANTHROPIC_BASE_URL` | API base URL (for proxies) | - | ❌ No |
 | `ANTHROPIC_MODEL` | Model identifier | `claude-3-5-haiku-20241022` | ❌ No |
-| `AGENT_LOG_LEVEL` | Log level (DEBUG/INFO/WARNING/ERROR) | `INFO` | ❌ No |
 
 ### Config Module (`config.py`)
 
@@ -595,7 +573,7 @@ Prefer short, direct answers without unnecessary explanations.
 | **Interface** | Terminal REPL | Deep IDE integration |
 | **Tool Count** | 6 basic tools | 15+ advanced tools |
 | **Git Support** | Via bash only | Native PR/diff/branch |
-| **Web Search** | ❌ Not implemented | ✅ Built-in |
+| **Web Search** | ✅ Bing + DuckDuckGo | ✅ Built-in |
 | **Code Index** | ❌ Not implemented | ✅ Project-wide symbols |
 | **MCP** | ❌ Not implemented | ✅ MCP servers |
 | **Shortcuts** | ❌ None | ✅ Rich keybindings |
@@ -680,7 +658,7 @@ Prefer short, direct answers without unnecessary explanations.
 
 ### Phase 2: Enhanced Tools 🚧
 - [ ] Git integration (status, diff, commit)
-- [ ] Web search tool
+- [x] Web search tool
 - [ ] Multi-file editing
 - [ ] Code search/index
 
@@ -711,8 +689,7 @@ minimal_agent/
 ├── context.py               # Context & compression ⭐
 ├── events.py                # Event types
 ├── llm_client.py            # Anthropic API client
-├── log.py                   # Session logging
-├── logger.py                # Debug logger
+├── log.py                   # Logging (agent + conversation)
 ├── repl.py                  # REPL interface ⭐
 ├── check_installation.py    # Setup verification
 │
@@ -732,6 +709,7 @@ minimal_agent/
 │       ├── confirm.py
 │       ├── read.py
 │       ├── todoWrite.py     ⭐
+│       ├── web_search.py    ⭐
 │       └── write.py
 │
 └── .xxw_memory/             # Created at runtime
